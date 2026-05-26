@@ -3,7 +3,7 @@ const { Client } = pg;
 
 // Credenciales directas de tu Notion
 const client = new Client({
-  connectionString: "postgresql://proveedores_0cr9_user:J4WjtV7R5c62kXb5aqvtUH3ZRuv3dMR@dpg-d87kui8js32c73ee8tf0-a.oregon-postgres.render.com/proveedores_0cr9",
+  connectionString: "postgresql://proveedores_0cr9_user:J4WjtV7R5c62kXb5aqvhtUH3ZRuv3dMR@dpg-d87kui8js32c73ee8tf0-a.oregon-postgres.render.com/proveedores_0cr9",
   ssl: {
     rejectUnauthorized: false // Requerido para conexiones seguras con Render
   }
