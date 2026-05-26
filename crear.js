@@ -1,11 +1,17 @@
+JavaScript
+
 import pg from 'pg';
 const { Client } = pg;
 
-// Credenciales directas de tu Notion
+// Separamos los datos para evitar conflictos con caracteres especiales como la '@'
 const client = new Client({
-  connectionString: "postgresql://proveedores_0cr9_user:J4WjtV7R5c62kXb5aqvhtUH3ZRuv3dMR@dpg-d87kui8js32c73ee8tf0-a.oregon-postgres.render.com/proveedores_0cr9",
+  user: 'proveedores_0cr9_user',
+  host: 'dpg-d87kui8js32c73ee8tf0-a.oregon-postgres.render.com',
+  database: 'proveedores_0cr9',
+  password: 'J4WjtV7R5c62kXb5aqvtUH3ZRuv3dMR', // Tu contraseña se envía limpia y directa
+  port: 5432,
   ssl: {
-    rejectUnauthorized: false // Requerido para conexiones seguras con Render
+    rejectUnauthorized: false // Requerido por Render para conexiones seguras
   }
 });
 
