@@ -8,7 +8,7 @@ const client = new Client({
   user: 'proveedores_0cr9_user',
   host: 'dpg-d87kui8js32c73ee8tf0-a.oregon-postgres.render.com',
   database: 'proveedores_0cr9',
-  password: 'J4WjtV7R5c62kXb5aqvhtUH3ZRuv3dMR'
+  password: 'J4WjtV7R5c62kXb5aqvhtUH3ZRuv3dMR',
   port: 5432,
   ssl: {
     rejectUnauthorized: false // Requerido por Render para conexiones seguras
