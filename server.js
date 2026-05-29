@@ -52,7 +52,7 @@ app.post('/api/proveedores', async (req, res) => {
             correo_ea || null, correo_pagos, correo_tributario
         ];
 
-        const result = await clien.query(queryText, values);
+        const result = await client.query(queryText, values);
 
         res.status(200).json({ success: true, id: result.rows[0].id });
     } catch (err) {
