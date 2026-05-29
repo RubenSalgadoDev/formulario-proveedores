@@ -9,7 +9,7 @@ document.getElementById('formProveedores').addEventListener('submit', async (e) 
     btn.innerText = 'Procesando registro...';
 
     try {
-        const responde = await fetch('/api/proveedores' ,{
+        const response = await fetch('/api/proveedores' ,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
