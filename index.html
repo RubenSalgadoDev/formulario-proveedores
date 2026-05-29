@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Proveedores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h1>Formulario de Registro de Proveedores</h1>
+        <p>Por favor diligencie todos los campos para el registro en el sistema</p>
+
+        <form id="formProveedores">
+            <h3>1. Información General</h3>
+            <div class="grupo-campo">
+                <label for="nit">Número de Identificación Tributaria:</label>
+                <input type="text" id="nit" required placeholder="Ej: 900123456-1">
+                
+
+            </div>
+
+            <div class="grupo-campo">
+                <label for="estado">Estado:</label>
+                <select name="estado" id="estado" required>
+                    <option value="" selected disabled>Seleccione un estado...</option>
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                </select>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="razon_social">Razón Social / Nombre:</label>
+                <input type="text" id="razon_social" name="razon_social" required>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="tipo_proveeodor">Tipo de proveeedor:</label>
+                <select name="tipo_proveeodor" id="tipo_proveeodor">
+                    <option value="" selected disabled>Seleccione una opción...</option>
+                    <option value="Empresas de Servicios Públicos / E.S.P">Empresas de Servicios Públicos / E.S.P</option>
+                    <option value="Entidades Financieras">Entidades Financieras</option>
+                    <option value="Entidades Gubernamentales / Públicas">Entidades Gubernamentales / Públicas</option>
+                    <option value="Entidades Seguridad Social">Entidades Seguridad Social</option>
+                    <option value="Mano de Obra">Mano de Obra</option>
+                    <option value="Proveedor administrativo">Proveedor administrativo</option>
+                    <option value="Proveedor Proyecto">Proveedor Proyecto</option>
+                    <option value="Terceros Presidencia">Terceros Presidencia</option>
+                </select>
+            </div>
+
+            <h3>2. Fechas de Control</h3>
+            <div class="grupo-campo">
+                <label for="fecha_creacion">Fecha de creación en Sinco:</label>
+                <input type="date" id="fecha_creacion" name="fecha_creacion" required>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="ultima_actualizacion">Ultima Actualización:</label>
+                <input type="date" id="ultima_actualizacion" name="ultima_actualizacion" required>
+            </div>
+
+            <h3>3. Correos Electrónicos de Contacto</h3>
+            <div class="grupo-campo">
+                <label for="correo_rut">Correo impreson en el RUT:</label>
+                <input type="email" id="correo_rut" name="correo_rut" required placeholder="ejemplo@dominio.com">
+            </div>
+
+            <div>
+                <label for="correo_comercial">Correo de contacto comercial:</label>
+                <input type="email" id="correo_comercial" name="correo_comercial" required
+                    placeholder="ejemplo@dominio.com">
+            </div>
+
+            <div>
+                <label for="correo_compras">Correo de contacto de compras:</label>
+                <input type="email" id="correo_compras" name="correo_compras" placeholder="ejemplo@dominio.com">
+            </div>
+
+            <div>
+                <label for="correo_ea">Correo para envío de entradas de almacén:</label>
+                <input type="email" id="correo_ea" name="correo_ea" placeholder="ejemplo@dominio.com">
+            </div>
+
+            <div>
+                <label for="correo_pagos">Correo para notificación de pagos:</label>
+                <input type="email" id="correo_pagos" name="correo_pagos" required placeholder="ejemplo@dominio.com">
+            </div>
+
+            <div>
+                <label for="correo_tributario">Correo para envío de certificados tributarios:</label>
+                <input type="email" id="correo_tributario" name="correo_tributario" required
+                    placeholder="ejemplo@dominio.com">
+            </div>
+
+            <button type="submit" id="btnRegistrar">Registrar Proveedor</button>
+        </form>
+    </div>
+    <script src="frontend.js"></script>
+</body>
+</html>
