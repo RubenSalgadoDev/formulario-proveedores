@@ -54,7 +54,7 @@ app.post('/api/proveedores', async (req, res) => {
 
         const result = await client.query(queryText, values);
 
-        res.status(200).json({ success: true, id: result.rows[0].id });
+        res.status(200).json({ success: true});
     } catch (err) {
         console.error('Error al insertar en la BD:', err.message);
     } finally {
