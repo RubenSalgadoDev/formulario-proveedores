@@ -17,7 +17,7 @@ document.getElementById('formProveedores').addEventListener('submit', async (e) 
             body: JSON.stringify(data)
         });
 
-        const resultado = await responde.json();
+        const resultado = await response.json();
         if (response.ok){
             alert('¡Proveedor registrado exitosamente!');
             e.target.reset();
