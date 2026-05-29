@@ -1,4 +1,4 @@
-document.getElementById('formProveeedores').addEventListener('submit', async (e) => {
+document.getElementById('formProveedores').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
