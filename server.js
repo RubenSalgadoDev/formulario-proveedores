@@ -23,7 +23,7 @@ const dbConfig = {
 };
 
 
-app.opst('/api/proveedores', async (req, res) => {
+app.post('/api/proveedores', async (req, res) => {
     const client = new Client(dbConfig);
 
     const {
