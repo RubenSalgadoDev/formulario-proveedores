@@ -54,7 +54,7 @@ app.post('/api/proveedores', async (req, res) => {
 
         const result = await client.query(queryText, values);
 
-        res.status(200).json({ success: true});
+        return res.status(200).json({ success: true});
         
     } catch (err) {
         
@@ -64,9 +64,8 @@ app.post('/api/proveedores', async (req, res) => {
     } finally {
         await client.end();
     }
+    
 });
-
-app.use(express.static(__dirname));
 
 app.listen(PORT, () =>{
     console.log(`Servidor local corriendo de manera exitosa en el puerto ${PORT}`)
