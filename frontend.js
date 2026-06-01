@@ -1,7 +1,11 @@
 document.getElementById('formProveedores').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
+    const formulario = e.target;
+
+    
+
+    const formData = new FormData(formulario);
     const data = Object.fromEntries(formData.entries());
 
     const btn = document.getElementById('btnRegistrar');
@@ -20,7 +24,7 @@ document.getElementById('formProveedores').addEventListener('submit', async (e) 
         const resultado = await response.json();
         if (response.ok){
             alert('¡Proveedor registrado exitosamente!');
-            e.target.reset();
+            formulario.reset();
         }else{
             alert('Error en el registro: ' + resultado.error);
         }
