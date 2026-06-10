@@ -1,43 +1,43 @@
 body {
     font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color:#f4f6f9;
+    background-color: #f4f6f9;
     color: #333;
-    padding: 20px;   
+    padding: 20px;
 }
 
-.form-container{
+.form-container {
     max-width: 700px;
     margin: 0 auto;
     background: #FFFFFF;
     padding: 40px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h1{
-    color:#7D1340;
+h1 {
+    color: #7D1340;
     text-align: center;
     margin-bottom: 5px;
 }
 
-h3{
+h3 {
     color: #555;
     border-bottom: 2px solid #e9ecef;
     padding-bottom: 5px;
     margin-top: 30px;
 }
 
-p{
+p {
     text-align: center;
     color: #6c757d;
     margin-bottom: 30px;
 }
 
-.grupo-campo{
+.grupo-campo {
     margin-bottom: 18px;
 }
 
-label{
+label {
     display: block;
     margin-bottom: 6px;
     font-weight: 600;
@@ -56,13 +56,14 @@ select {
     font-size: 14px;
 }
 
-input:focus, select:focus{
+input:focus,
+select:focus {
     border-color: white;
     outline: 0;
     box-shadow: 0 0 0 0.2rem #F3AFCC;
 }
 
-button{
+button {
     display: block;
     width: 100%;
     padding: 12px;
@@ -72,12 +73,115 @@ button{
     border-radius: 4px;
     font-size: 16px;
     font-weight: bold;
-    cursor:pointer;
+    cursor: pointer;
     margin-top: 25px;
 }
 
-button:hover{
+button:hover {
     background-color: #DF2D79;
 }
 
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 15px;
+}
 
+#tablaProveedores {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+#tablaProveedores th,
+#tablaProveedores td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#tablaProveedores th {
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-weight: 6px;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+#tablaProveedores tr:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* 🔘 Botón de acción 'Editar' dentro de la tabla */
+
+.btn-editar-fila {
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s ease;
+}
+
+.btn-editar-fila:hover {
+    background-color: 2b6cb0;
+}
+
+/* 📑 Estilos del Modal (Capa oscura de fondo) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur (4px);
+    /*suaviza el fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Campos bloqueados (como el NIT) */
+
+.input-disabled {
+    background-color: rgba(255, 255, 255, 0.01) !important;
+    color: #888 !important;
+    cursor: not-allowed;
+}
+
+.alerta-input {
+    color: #aaa;
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+}
+
+/*Botones del formulariode edición */
+
+.grupo-botones-modal {
+    display: flex;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.btn-guardar {
+    background-color: #38a169 !important;
+}
+
+.btn-guardar:hover {
+    background-color: #2f855a !important;
+}
+
+.btn-cancelar {
+    background-color: #e53e3e !important;
+}
+
+.btn-cancelar :hover {
+    background-color: #c53030 !important;
+}

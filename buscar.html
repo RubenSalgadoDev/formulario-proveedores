@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busqueda de Proveedores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="form-container">
+        <h1>Busqueda de Proveedores</h1>
+
+        <form id="busquedaProveedores">
+            <h3>Seleccione el método de busqueda del proveedor (NIT / Razón Social)</h3>
+
+            <div class="grupo-campo">
+                <label for="tipo">Dato a buscar:</label>
+                <select name="tipo" id="tipo" required>
+                    <option value="" selected disabled>Seleccione una opción</option>
+                    <option value="NIT">NIT</option>
+                    <option value="Razón Social">Razón Social</option>
+                </select>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="busqueda">Ingrese el dato a buscar:</label>
+                <input type="text" id="busqueda" name="busqueda" required>
+            </div>
+
+            <button type="submit" id="btnBuscar">Buscar Proveedor</button>
+        </form>
+    </div>
+
+    <div id="resultadoContenedor" class="form-container" style="display: none; margin-top: 20px;">
+        <h2>Proveedores Encontrados</h2>
+        <div class="table-responsive">
+            <table id="tablaProveedores">
+                <thead>
+                    <tr>
+                        <th>NIT</th>
+                        <th>Razón Social</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="modalEdicion" class="modal-overlay" style="display: none;">
+        <div class="form-container modal-content">
+            <h2>Editar Proveedor</h2>
+            <form id="formEditarProveedor">
+
+                <input type="hidden" id="edit_id" name="id">
+
+                <div class="grupo-campo">
+                    <label for="edit_nit">NIT:</label>
+                    <input type="text" id="edit_nit" name="nit" disabled class="input-disabled">
+                    <small class="alerta-input">(El NIT no es modificable)</small>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="edit_razon_social">Razón Social</label>
+                    <input type="text" id="edit_razon_social" name="razon_social" required>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="edit_estado">Estado</label>
+                    <select name="estado" id="edit_estado" required>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+
+                <div class="grupo-campo"><label>Correo RUT:</label><input type="email" id="edit_correo_rut"
+                        name="correo_rut" required></div>
+                <div class="grupo-campo"><label>Correo Comercial:</label><input type="email" id="edit_correo_comercial"
+                        name="correo_comercial" required></div>
+                <div class="grupo-campo"><label>Correo Compras:</label><input type="email" id="edit_correo_compras"
+                        name="correo_compras" required></div>
+                <div class="grupo-campo"><label>Correo Entradas Almacén:</label><input type="email"
+                        id="edit_correo_entradas" name="correo_entradas" required></div>
+                <div class="grupo-campo"><label>Correo Pagos:</label><input type="email" id="edit_correo_pagos"
+                        name="correo_pagos" required></div>
+                <div class="grupo-campo"><label>Correo Tributario:</label><input type="email"
+                        id="edit_correo_tributario" name="correo_tributario" required></div>
+
+                <div class="grupo-botones-modal">
+                    <button type="submit" id="btnGuardarCambios" class="btn-guardar">Guardar Cambios</button>
+                    <button type="button" id="btnCancelarEdicion" class="btn-cancelar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="frontend.js"></script>
+</body>
+
+</html>

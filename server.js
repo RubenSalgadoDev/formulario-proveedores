@@ -54,20 +54,67 @@ app.post('/api/proveedores', async (req, res) => {
 
         const result = await client.query(queryText, values);
 
-        return res.status(200).json({ success: true});
-        
+        return res.status(200).json({ success: true });
+
     } catch (err) {
-        
+
         console.error('Error al insertar en la BD:', err.message);
         return res.status(500).json({ success: false, error: err.message });
-        
+
     } finally {
         await client.end();
     }
-    
+
 });
 
-app.listen(PORT, () =>{
+// 🔍 RUTA PARA BUSCAR PROVEEDORES (Fase 2)
+
+app.get('/api/proveedores/buscar', async (req, res) => {
+    const { tipo, valor } = req.query;
+
+    //validar que parametros no esten vacios
+    if (!tipo || !valor) {
+        return res.status(400).json({ success: false, mesage: 'Faltan parametros de búsqueda' });
+    }
+
+    //inicializar una instancia del cliente de la BD
+    const client = new Client(dbConfig);
+
+    try {
+        await client.connect();
+
+        let queryText = '';
+        let values = [];
+
+        if (tipo === 'nit') {
+            //busqueda por NIT exacta
+            queryText = 'SELECT * FROM proveedores WHERE nit = $1';
+            values = [valor.trim()];
+        } else if (tipo === 'Razon_Social') {
+            queryText = 'SELECT * FROM proveedores WHERE razon_social ILIKE $1';
+            values = [`%${valor.trim()}%`];
+        } else {
+            return res.status(400).json({
+                success: false, message: 'Tipo de búsqueda no válido'
+            });
+        }
+
+        const result = await client.query(queryText, values);
+        res.status(200).json({ success: true, datos: result.rows });
+
+    } catch (err) {
+        console.error('Error al consultar en la BD:', err.message);
+        res.status(500).json({ success: false, error: 'Error interno del servidor al buscar.' });
+    } finally {
+        await client.end();
+    }
+});
+
+app.listen(PORT, () => {
     console.log(`Servidor local corriendo de manera exitosa en el puerto ${PORT}`)
 });
+
+
+
+
 
