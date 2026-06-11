@@ -36,11 +36,20 @@ document.getElementById('formProveedores').addEventListener('submit', async (e) 
         btn.innerText = 'Registrar Proveedor';
     }
 });
+
 const formBusqueda = document.getElementById('busquedaProveedores');
 const inputBusqueda = document.getElementById('busqueda');
 const selectTipo = document.getElementById('tipo');
 const resultadoContenedor = document.getElementById('resultadoContenedor');
 const cuerpoTabla = document.getElementById('cuerpoTabla');
+
+//Referencias del modal edición
+
+const modalEdicion = document.getElementById('modalEdicion');
+const btnCancelarEdicion = document.getElementById('btnCancelarEdicion');
+const formEditarProveedor = document.getElementById('formEditarProveedor');
+
+
 
 //Escuchar el envío del formulario de busqueda.
 formBusqueda.addEventListener('submit',async (e) =>{
@@ -59,11 +68,11 @@ formBusqueda.addEventListener('submit',async (e) =>{
 
         if (resultado.success) {
             //Limpiamos las filas anteriores de la tabla
-            curpoTabla.innerHTML = '';
+            cuerpoTabla.innerHTML = '';
 
             //Si no se encontraton registros coincidentes
             if (resultado.datos.length === 0) {
-                LargestContentfulPaint('No se encontraron proveedores con los datos ingresados.');
+                alert('No se encontraron proveedores con los datos ingresados.');
                 resultadoContenedor.classList.add('resultado-oculto');
                 return;
             }
@@ -77,7 +86,7 @@ formBusqueda.addEventListener('submit',async (e) =>{
                     <td>${proveedor.razon_social}</td>
                     <td>${proveedor.estado}</td>
                     <td>
-                        <button class?"btn-editar-fila" data-id="${proveedor.id}">Editar</button>
+                        <button type="button" class="btn-editar-fila" data-proveedor='${JSON.stringify(proveedor)}'>Editar</button>
                     </td>    
                 `;
                 cuerpoTabla.appendChild(fila);
@@ -93,4 +102,35 @@ formBusqueda.addEventListener('submit',async (e) =>{
         console.error('Error al conectar con el servidor:', error);
         alert('hubo un fallo de comunicación con el servidor al realizar la busqueda.');
     }
+});
+
+// 3. EVENTO B: Escuchar los clics en los botones de la tabla para abrir el Modal
+cuerpoTabla.addEventListener('click', (e) => {
+    // Verificamos si el clic fue específicamente en un botón de clase 'btn-editar-fila'
+    if (e.target.classList.contains('btn-editar-fila')) {
+        
+        // Extraemos los datos del proveedor que guardamos en la fila
+        const proveedor = JSON.parse(e.target.getAttribute('data-proveedor'));
+
+        // Cargamos los datos del proveedor directamente en los campos del Modal
+        document.getElementById('edit_id').value = proveedor.id;
+        document.getElementById('edit_nit').value = proveedor.nit;
+        document.getElementById('edit_razon_social').value = proveedor.razon_social;
+        document.getElementById('edit_estado').value = proveedor.estado;
+        document.getElementById('edit_correo_rut').value = proveedor.correo_rut;
+        document.getElementById('edit_correo_comercial').value = proveedor.correo_comercial;
+        document.getElementById('edit_correo_compras').value = proveedor.correo_compras || '';
+        document.getElementById('edit_correo_entradas').value = proveedor.correo_ea || '';
+        document.getElementById('edit_correo_pagos').value = proveedor.correo_pagos;
+        document.getElementById('edit_correo_tributario').value = proveedor.correo_tributario;
+
+        // Mostramos el modal retirando la clase que lo esconde
+        modalEdicion.classList.remove('modal-oculto');
+    }
+});
+
+// 4. EVENTO C: Cerrar el modal al dar clic en Cancelar
+btnCancelarEdicion.addEventListener('click', () => {
+    modalEdicion.classList.add('modal-oculto');
+    formEditarProveedor.reset(); // Limpia el formulario de edición
 });
