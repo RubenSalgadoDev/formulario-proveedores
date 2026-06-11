@@ -86,7 +86,7 @@ app.get('/api/proveedores/buscar', async (req, res) => {
         let queryText = '';
         let values = [];
 
-        if (tipo === 'nit') {
+        if (tipo === 'NIT') {
             //busqueda por NIT exacta
             queryText = 'SELECT * FROM proveedores WHERE nit = $1';
             values = [valor.trim()];
