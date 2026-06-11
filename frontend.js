@@ -1,136 +1,139 @@
-document.getElementById('formProveedores').addEventListener('submit', async (e) => {
-    e.preventDefault();
+// ==========================================
+// FASE 1: REGISTRO DE PROVEEDORES (index.html)
+// ==========================================
+const formRegistro = document.getElementById('formProveedores');
 
-    const formulario = e.target;
+// Validamos si el formulario de registro existe en la página actual
+if (formRegistro) {
+    formRegistro.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
+        const formulario = e.target;
+        const formData = new FormData(formulario);
+        const data = Object.fromEntries(formData.entries());
 
-
-    const formData = new FormData(formulario);
-    const data = Object.fromEntries(formData.entries());
-
-    const btn = document.getElementById('btnRegistrar');
-    btn.disabled = true;
-    btn.innerText = 'Procesando registro...';
-
-    try {
-        const response = await fetch('/api/proveedores', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-
-        const resultado = await response.json();
-        if (response.ok) {
-            alert('¡Proveedor registrado exitosamente!');
-            formulario.reset();
-        } else {
-            alert('Error en el registro: ' + resultado.error);
+        const btn = document.getElementById('btnRegistrar');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerText = 'Procesando registro...';
         }
-    } catch (error) {
-        console.error('Error de comunicación:', error);
-        alert('No se pudo establecer conexión con el servidor.');
-    } finally {
-        btn.disabled = false;
-        btn.innerText = 'Registrar Proveedor';
-    }
-});
 
+        try {
+            const response = await fetch('/api/proveedores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const resultado = await response.json();
+            if (response.ok) {
+                alert('¡Proveedor registrado exitosamente!');
+                formulario.reset();
+            } else {
+                alert('Error en el registro: ' + resultado.error);
+            }
+        } catch (error) {
+            console.error('Error de comunicación:', error);
+            alert('No se pudo establecer conexión con el servidor.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerText = 'Registrar Proveedor';
+            }
+        }
+    });
+}
+
+// ==========================================
+// FASE 2: LÓGICA DE BÚSQUEDA Y EDICIÓN (buscar.html)
+// ==========================================
 const formBusqueda = document.getElementById('busquedaProveedores');
 const inputBusqueda = document.getElementById('busqueda');
 const selectTipo = document.getElementById('tipo');
 const resultadoContenedor = document.getElementById('resultadoContenedor');
 const cuerpoTabla = document.getElementById('cuerpoTabla');
 
-//Referencias del modal edición
-
 const modalEdicion = document.getElementById('modalEdicion');
 const btnCancelarEdicion = document.getElementById('btnCancelarEdicion');
 const formEditarProveedor = document.getElementById('formEditarProveedor');
 
+// Validamos si el formulario de búsqueda existe en la página actual antes de colgar el evento
+if (formBusqueda) {
+    formBusqueda.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Ahora sí detendrá la recarga de forma garantizada
 
+        const tipo = selectTipo.value;
+        const valor = inputBusqueda.value;
 
-//Escuchar el envío del formulario de busqueda.
-formBusqueda.addEventListener('submit',async (e) =>{
-    e.preventDefault();//Evita que la pagina se recargue
+        const url = `/api/proveedores/buscar?tipo=${encodeURIComponent(tipo)}&valor=${encodeURIComponent(valor)}`;
 
-    const tipo = selectTipo.value;
-    const valor = inputBusqueda.value;
+        try {
+            const response = await fetch(url);
+            const resultado = await response.json();
 
-    //Construimos la URL con los parametros correspondientes
-    //Ejemplo final: /api/proveedores/buscar?tipo=Razon_Social&valor=creando
-    const url = `/api/proveedores/buscar?tipo=${encodeURIComponent(tipo)}&valor=${encodeURIComponent(valor)}`;
+            if (resultado.success) {
+                cuerpoTabla.innerHTML = '';
 
-    try {
-        const response = await fetch(url);
-        const resultado = await response.json();
+                if (resultado.datos.length === 0) {
+                    alert('No se encontraron proveedores con los datos ingresados.');
+                    resultadoContenedor.classList.add('resultado-oculto');
+                    return;
+                }
 
-        if (resultado.success) {
-            //Limpiamos las filas anteriores de la tabla
-            cuerpoTabla.innerHTML = '';
+                resultado.datos.forEach(proveedor => {
+                    const fila = document.createElement('tr');
 
-            //Si no se encontraton registros coincidentes
-            if (resultado.datos.length === 0) {
-                alert('No se encontraron proveedores con los datos ingresados.');
-                resultadoContenedor.classList.add('resultado-oculto');
-                return;
+                    fila.innerHTML = `
+                        <td><strong>${proveedor.nit}</strong></td>
+                        <td>${proveedor.razon_social}</td>
+                        <td>${proveedor.estado}</td>
+                        <td>
+                            <button type="button" class="btn-editar-fila" data-proveedor='${JSON.stringify(proveedor)}'>Editar</button>
+                        </td>    
+                    `;
+                    cuerpoTabla.appendChild(fila);
+                });
+
+                resultadoContenedor.classList.remove('resultado-oculto');
+
+            } else {
+                alert(`Error en la búsqueda: ${resultado.message}`);
             }
-
-            //Recorremos los proveedores devueltos por la BD y los inyectamos en la tabla
-            resultado.datos.forEach(proveedor => {
-                const fila = document.createElement('tr');
-
-                fila.innerHTML = `
-                    <td><strong>${proveedor.nit}</strong></td>
-                    <td>${proveedor.razon_social}</td>
-                    <td>${proveedor.estado}</td>
-                    <td>
-                        <button type="button" class="btn-editar-fila" data-proveedor='${JSON.stringify(proveedor)}'>Editar</button>
-                    </td>    
-                `;
-                cuerpoTabla.appendChild(fila);
-            });
-
-            //Mostramos el contenedor de la tabla quitando la clase oculta
-            resultadoContenedor.classList.remove('resultado-oculto');
-
-        } else {
-            alert(`Error en la busqueda: ${resultado.message}`);
+        } catch (error) {
+            console.error('Error al conectar con el servidor:', error);
+            alert('Hubo un fallo de comunicación con el servidor al realizar la búsqueda.');
         }
-    }catch (error){
-        console.error('Error al conectar con el servidor:', error);
-        alert('hubo un fallo de comunicación con el servidor al realizar la busqueda.');
-    }
-});
+    });
+}
 
-// 3. EVENTO B: Escuchar los clics en los botones de la tabla para abrir el Modal
-cuerpoTabla.addEventListener('click', (e) => {
-    // Verificamos si el clic fue específicamente en un botón de clase 'btn-editar-fila'
-    if (e.target.classList.contains('btn-editar-fila')) {
-        
-        // Extraemos los datos del proveedor que guardamos en la fila
-        const proveedor = JSON.parse(e.target.getAttribute('data-proveedor'));
+// Control del Modal (Solo si la tabla existe en la página)
+if (cuerpoTabla) {
+    cuerpoTabla.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-editar-fila')) {
+            const proveedor = JSON.parse(e.target.getAttribute('data-proveedor'));
 
-        // Cargamos los datos del proveedor directamente en los campos del Modal
-        document.getElementById('edit_id').value = proveedor.id;
-        document.getElementById('edit_nit').value = proveedor.nit;
-        document.getElementById('edit_razon_social').value = proveedor.razon_social;
-        document.getElementById('edit_estado').value = proveedor.estado;
-        document.getElementById('edit_correo_rut').value = proveedor.correo_rut;
-        document.getElementById('edit_correo_comercial').value = proveedor.correo_comercial;
-        document.getElementById('edit_correo_compras').value = proveedor.correo_compras || '';
-        document.getElementById('edit_correo_entradas').value = proveedor.correo_ea || '';
-        document.getElementById('edit_correo_pagos').value = proveedor.correo_pagos;
-        document.getElementById('edit_correo_tributario').value = proveedor.correo_tributario;
+            document.getElementById('edit_id').value = proveedor.id;
+            document.getElementById('edit_nit').value = proveedor.nit;
+            document.getElementById('edit_razon_social').value = proveedor.razon_social;
+            document.getElementById('edit_estado').value = proveedor.estado;
+            document.getElementById('edit_correo_rut').value = proveedor.correo_rut;
+            document.getElementById('edit_correo_comercial').value = proveedor.correo_comercial;
+            document.getElementById('edit_correo_compras').value = proveedor.correo_compras || '';
+            document.getElementById('edit_correo_entradas').value = proveedor.correo_ea || '';
+            document.getElementById('edit_correo_pagos').value = proveedor.correo_pagos;
+            document.getElementById('edit_correo_tributario').value = proveedor.correo_tributario;
 
-        // Mostramos el modal retirando la clase que lo esconde
-        modalEdicion.classList.remove('modal-oculto');
-    }
-});
+            modalEdicion.classList.remove('modal-oculto');
+        }
+    });
+}
 
-// 4. EVENTO C: Cerrar el modal al dar clic en Cancelar
-btnCancelarEdicion.addEventListener('click', () => {
-    modalEdicion.classList.add('modal-oculto');
-    formEditarProveedor.reset(); // Limpia el formulario de edición
-});
+// Cierre del Modal
+if (btnCancelarEdicion) {
+    btnCancelarEdicion.addEventListener('click', () => {
+        modalEdicion.classList.add('modal-oculto');
+        formEditarProveedor.reset();
+    });
+}
