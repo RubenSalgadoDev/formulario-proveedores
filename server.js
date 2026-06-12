@@ -128,7 +128,7 @@ app.put('/api/proveedores/:id', async (req, res) => {
         correo_rut,
         correo_comercial,
         correo_compras,
-        correo_ea, // Así mapeamos el correo de Entradas Almacén
+        correo_entradas, // Así mapeamos el correo de Entradas Almacén
         correo_pagos,
         correo_tributario
     } = req.body;
@@ -148,7 +148,7 @@ app.put('/api/proveedores/:id', async (req, res) => {
                 correo_rut = $3,
                 correo_comercial = $4,
                 correo_compras = $5,
-                correo_ea = $6,
+                correo_entradas = $6,
                 correo_pagos = $7,
                 correo_tributario = $8
             WHERE id = $9
