@@ -114,7 +114,90 @@ app.listen(PORT, () => {
     console.log(`Servidor local corriendo de manera exitosa en el puerto ${PORT}`)
 });
 
+JavaScript
 
+// ==========================================
+// RUTA PARA ACTUALIZAR UN PROVEEDOR (PUT)
+// ==========================================
+app.put('/api/proveedores/:id', async (req, res) => {
+    // 1. Extraemos el ID de la URL
+    const { id } = req.params; 
+
+    // 2. Extraemos los campos modificados que vienen del formulario del modal
+    const {
+        razon_social,
+        estado,
+        correo_rut,
+        correo_comercial,
+        correo_compras,
+        correo_ea, // Así mapeamos el correo de Entradas Almacén
+        correo_pagos,
+        correo_tributario
+    } = req.body;
+
+    // Conectamos un cliente del pool para ejecutar la transacción de forma segura
+    let client;
+    
+    try {
+        client = await pool.connect(); // Usamos pool.connect() o pool.query() según manejes tu estructura
+
+        // 3. Definimos la consulta SQL estructurada con parámetros de sustitución ($1, $2, etc.)
+        const queryText = `
+            UPDATE proveedores 
+            SET 
+                razon_social = $1,
+                estado = $2,
+                correo_rut = $3,
+                correo_comercial = $4,
+                correo_compras = $5,
+                correo_ea = $6,
+                correo_pagos = $7,
+                correo_tributario = $8
+            WHERE id = $9
+            RETURNING *;
+        `;
+
+        // 4. Mapeamos exactamente las variables con el orden de los comodines superiores
+        const values = [
+            razon_social.trim(),
+            estado,
+            correo_rut.trim(),
+            correo_comercial.trim(),
+            correo_compras ? correo_compras.trim() : null,
+            correo_ea ? correo_ea.trim() : null,
+            correo_pagos.trim(),
+            correo_tributario.trim(),
+            id // El ID es el filtro indispensable del WHERE ($9)
+        ];
+
+        // 5. Ejecutamos la consulta en PostgreSQL
+        const resultado = await client.query(queryText, values);
+
+        // Si la consulta no afectó ninguna fila, significa que el ID no existía
+        if (resultado.rowCount === 0) {
+            return res.status(404).json({ 
+                success: false, 
+                error: 'El proveedor que intenta editar no fue encontrado.' 
+            });
+        }
+
+        // 6. Si todo salió bien, respondemos con éxito total
+        res.json({ 
+            success: true, 
+            message: 'Proveedor actualizado exitosamente en la base de datos.',
+            proveedor: resultado.rows[0] 
+        });
+
+    } catch (error) {
+        console.error('Error crítico al actualizar el proveedor en el backend:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Hubo un error interno en el servidor al procesar la actualización.' 
+        });
+    } finally {
+        if (client) client.release(); // Liberamos la conexión de vuelta al pool
+    }
+});
 
 
 
