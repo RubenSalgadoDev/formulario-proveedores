@@ -118,7 +118,6 @@ app.listen(PORT, () => {
 // RUTA PARA ACTUALIZAR UN PROVEEDOR (PUT)
 // ==========================================
 app.put('/api/proveedores/:id', async (req, res) => {
-    // 🟢 (req, res) en el orden correcto asegura que req.params y req.body funcionen
     const { id } = req.params; 
     
     const {
@@ -132,16 +131,7 @@ app.put('/api/proveedores/:id', async (req, res) => {
         correo_tributario
     } = req.body;
 
-    let client;
-    
     try {
-        // Inicializamos la conexión usando tu estructura de pg
-        client = new Client({
-            // Aquí toma automáticamente tus variables de entorno o configuración de conexión
-            connectionString: process.env.DATABASE_URL // O la configuración exacta que manejes arriba
-        });
-        await client.connect();
-
         const queryText = `
             UPDATE proveedores 
             SET 
@@ -169,7 +159,8 @@ app.put('/api/proveedores/:id', async (req, res) => {
             id
         ];
 
-        const resultado = await client.query(queryText, values);
+        // 🟢 Usamos directamente tu pool global (igual que en la búsqueda)
+        const resultado = await pool.query(queryText, values);
 
         if (resultado.rowCount === 0) {
             return res.status(404).json({ 
@@ -189,9 +180,5 @@ app.put('/api/proveedores/:id', async (req, res) => {
             success: false, 
             error: 'Hubo un error interno en el servidor al procesar la actualización.' 
         });
-    } finally {
-        if (client) {
-            await client.end(); // Cerramos la conexión del cliente individual de pg de forma limpia
-        }
     }
 });
