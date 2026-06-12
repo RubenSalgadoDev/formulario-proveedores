@@ -114,8 +114,6 @@ app.listen(PORT, () => {
     console.log(`Servidor local corriendo de manera exitosa en el puerto ${PORT}`)
 });
 
-JavaScript
-
 // ==========================================
 // RUTA PARA ACTUALIZAR UN PROVEEDOR (PUT)
 // ==========================================
