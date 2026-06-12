@@ -137,3 +137,67 @@ if (btnCancelarEdicion) {
         formEditarProveedor.reset();
     });
 }
+
+if (formEditarProveedor) {
+    formEditarProveedor.addEventListener('submit', async (e) => {
+        e.preventDefault(); // 🛑 ¡AHORA SÍ detendrá la recarga de la página de forma garantizada!
+
+        const id = document.getElementById('edit_id').value;
+        const btnGuardar = document.getElementById('btnGuardarCambios');
+
+        // Capturamos los valores actuales de los inputs del modal
+        const dataEdicion = {
+            razon_social: document.getElementById('edit_razon_social').value,
+            estado: document.getElementById('edit_estado').value,
+            correo_rut: document.getElementById('edit_correo_rut').value,
+            correo_comercial: document.getElementById('edit_correo_comercial').value,
+            correo_compras: document.getElementById('edit_correo_compras').value || null,
+            correo_ea: document.getElementById('edit_correo_entradas').value || null, // Mapeado a correo_ea del Back
+            correo_pagos: document.getElementById('edit_correo_pagos').value,
+            correo_tributario: document.getElementById('edit_correo_tributario').value
+        };
+
+        // Bloqueamos el botón visualmente
+        if (btnGuardar) {
+            btnGuardar.disabled = true;
+            btnGuardar.innerText = 'Guardando...';
+        }
+
+        try {
+            // Enviamos la petición PUT real hacia la API del backend
+            const response = await fetch(`/api/proveedores/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataEdicion)
+            });
+
+            const resultado = await response.json();
+
+            if (resultado.success) {
+                alert('¡Proveedor actualizado con éxito!');
+                
+                // Ocultamos el modal de forma limpia
+                modalEdicion.classList.add('modal-oculto');
+                formEditarProveedor.reset();
+
+                // Refrescamos automáticamente la tabla realizando la búsqueda de nuevo
+                if (formBusqueda) {
+                    formBusqueda.dispatchEvent(new Event('submit'));
+                }
+            } else {
+                alert(`Error al actualizar: ${resultado.error}`);
+            }
+
+        } catch (error) {
+            console.error('Error al conectar con el servidor:', error);
+            alert('Hubo un fallo de comunicación con el servidor al intentar actualizar.');
+        } finally {
+            if (btnGuardar) {
+                btnGuardar.disabled = false;
+                btnGuardar.innerText = 'Guardar Cambios';
+            }
+        }
+    });
+}
